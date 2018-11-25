@@ -1,0 +1,35 @@
+- What are the advantages and disadvantages of each of the two scheduling policies? Also, give the advantages and 
+  disadvantages of the round-robin scheduling policy originally implemented in Xinu.
+
+Ans: 
+	For Linux Like Scheduler
+		Advantages:
+		- Each process is served by the CPU for a fixed time quantum, so every process will give up a CPU after it's quantum is over. And processes get promoted too because of their goodness value(
+		  (in case of processes quantum was not over in the last epoch it's quantum gets increased).
+		- Starvation doesn't occur in round robin and every process is given a fixed time to execute
+		Disadvantages:
+		- A process with lower priority may get a very small slice of CPU time in a case when no other process goes to sleep. In that case, lower priority process may complete after the 
+			higher priority processes end. 
+		- Scheduler is slow because of additional computations
+		- At time the scheduling algorithm takes more clock cycles than actual processes.
+			
+	For Exponential Distribution Scheduler:
+		Advantages:
+		- It very wells defines a range of executable processes. 
+		- Even without order processes get CPU time according to their priorities.
+		Disadvantages:
+		- In the case of processes with small execution lifetime, a higher priority process might not get the CPU time fairly because of the randomness factor.
+	For default XINU scheduling :
+		Advantages:
+		- Rescheduling is fast
+		Disadvantages:
+		- If the process at ready tail has the priority less than running process than context switch will not happen and this may ultimately lead to the starvation problem. 
+		
+		immediate handling but has its priority set to a very low value, then it has to wait until all the
+		processes with higher priority finish executing. This leads to starvation of processes with lower priority.
+
+			
+Describe the way each of the schedulers affects the NULL process.
+	- When there are two processes left (actual userProcess and null) in the ready queue I give the control to the default XINU scheduler.
+	- In the ready.c I had to ignore the priority of nullProc for LINUX like scheduler.
+	- In exponential distribution scheduling, I always give another process the priority over nullProc even if the random value is close to zero.
